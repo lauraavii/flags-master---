@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seleccionar modo</title>
+  <link rel="stylesheet" href="../assets/ui.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero-panel">
+      <div>
+        <span class="eyebrow">Paso 2</span>
+        <h1 class="hero-title">Elige como quieres responder y pasa a jugar.</h1>
+        <p class="hero-text">Aqui ya no hace falta releer todo. Los modos estan agrupados por uso real: los mas claros a un lado y los especiales al otro. El filtro anterior se mantiene y se muestra arriba.</p>
+        <div class="hero-summary">
+          <span>Reconocer</span>
+          <span>Escribir</span>
+          <span>Velocidad</span>
+          <span>Mapas</span>
+        </div>
+      </div>
+
+      <aside class="context-card">
+        <div class="context-label">Filtro activo</div>
+        <p class="context-value" id="selected-filter">Sin filtro</p>
+        <p class="context-note">Si quieres cambiar la region o la dificultad, vuelve al inicio. Si no, solo elige modo y entra directo.</p>
+        <div class="inline-actions">
+          <button class="button-secondary" type="button" onclick="goHome()">Cambiar filtro</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="mode-layout">
+      <article class="panel">
+        <div class="panel-head">
+          <span class="panel-kicker">Modos recomendados</span>
+          <h2>Los mas claros para jugar comodo</h2>
+          <p>Estos tres tienen la lectura mas limpia y suelen ser los mejores para empezar sin perder tiempo entendiendo la mecanica.</p>
+        </div>
+
+        <div class="mode-list">
+          <button class="mode-row mode-row-accent" type="button" onclick="startMode('countryToFlag')">
+            <span class="mode-copy">
+              <strong>Pais a 4 banderas</strong>
+              <span>La opcion mas directa para relacionar nombre y bandera sin friccion.</span>
+            </span>
+            <span class="mode-tag">Facil</span>
+          </button>
+
+          <button class="mode-row" type="button" onclick="startMode('flagToCountry4')">
+            <span class="mode-copy">
+              <strong>Bandera a 4 paises</strong>
+              <span>Buena para leer rapido y afinar el reconocimiento visual.</span>
+            </span>
+            <span class="mode-tag">Rapido</span>
+          </button>
+
+          <button class="mode-row" type="button" onclick="startMode('flagToCountry')">
+            <span class="mode-copy">
+              <strong>Bandera a escribir pais</strong>
+              <span>La mejor para comprobar recuerdo real en vez de simple reconocimiento.</span>
+            </span>
+            <span class="mode-tag">Memoria</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <span class="panel-kicker">Especiales</span>
+          <h2>Modos rapidos y variantes</h2>
+          <p>El resto queda recogido en una lista unica, sin duplicar estructuras. Asi puedes compararlos y cambiar sin sentir que estas en otro menu.</p>
+        </div>
+
+        <div class="mode-list">
+          <button class="mode-row" type="button" onclick="startMode('dragDrop')">
+            <span class="mode-copy">
+              <strong>Arrastrar bandera a pais</strong>
+              <span>Mas visual, con varias piezas en pantalla a la vez.</span>
+            </span>
+            <span class="mode-tag">Visual</span>
+          </button>
+
+          <button class="mode-row" type="button" onclick="startMode('countryToFlag6')">
+            <span class="mode-copy">
+              <strong>Cascada de 6 banderas</strong>
+              <span>Ronda mas intensa con bonus por limpiar la tanda completa.</span>
+            </span>
+            <span class="mode-tag">Racha</span>
+          </button>
+
+          <button class="mode-row" type="button" onclick="startMode('mode1minuto')">
+            <span class="mode-copy">
+              <strong>1 minuto de paises</strong>
+              <span>Sesion corta para medir ritmo, precision y reflejos.</span>
+            </span>
+            <span class="mode-tag">Tiempo</span>
+          </button>
+
+          <button class="mode-row" type="button" onclick="startMode('mode1minutoBanderas')">
+            <span class="mode-copy">
+              <strong>1 minuto de banderas</strong>
+              <span>La variante rapida centrada en lectura visual pura.</span>
+            </span>
+            <span class="mode-tag">Tiempo</span>
+          </button>
+
+          <button class="mode-row" type="button" onclick="startMode('mapMode')">
+            <span class="mode-copy">
+              <strong>Modo mapas</strong>
+              <span>Mas exigente. Solo tiene sentido con Europa y Africa.</span>
+            </span>
+            <span class="mode-tag">Dificil</span>
+          </button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+  function formatFilterLabel(type, value) {
+    if (!type || !value) return "Sin filtro";
+    if (type === "level") return "Nivel " + value;
+    if (type === "continent") return value;
+    return value;
+  }
+
+  function hydrateFilterLabel() {
+    const type = sessionStorage.getItem("type");
+    const value = sessionStorage.getItem("value");
+    const label = formatFilterLabel(type, value);
+    const selectedFilter = document.getElementById("selected-filter");
+    if (selectedFilter) selectedFilter.textContent = label;
+  }
+
+  function startMode(modeName) {
+    sessionStorage.setItem("mode", modeName);
+    window.location.href = "juego.html";
+  }
+
+  function goHome() {
+    window.location.href = "../index.html";
+  }
+
+  hydrateFilterLabel();
+  </script>
+</body>
+</html>

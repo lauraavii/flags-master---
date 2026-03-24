@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Banderas</title>
+  <link rel="stylesheet" href="assets/ui.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero-panel">
+      <div>
+        <span class="eyebrow">Juego de banderas</span>
+        <h1 class="hero-title">Aprende mas rapido con una interfaz que se entiende al primer vistazo.</h1>
+        <p class="hero-text">He compactado el flujo para que no tengas veinte cajas peleando por tu atencion. Primero eliges el filtro, luego el modo y despues juegas con la informacion importante siempre a la vista.</p>
+        <div class="hero-summary">
+          <span>1. Filtra</span>
+          <span>2. Elige modo</span>
+          <span>3. Juega sin ruido</span>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <div>
+          <strong>Ahora el menu principal sirve para decidir rapido, no para marearte.</strong>
+          <p>Dos paneles, acciones mas directas y un recorrido mucho mas corto hasta la partida.</p>
+        </div>
+        <ul class="hero-card-list">
+          <li>Los niveles estan juntos en un solo bloque claro.</li>
+          <li>Las regiones se leen de un vistazo y sin tarjetas gigantes.</li>
+          <li>El modo libre queda destacado como acceso rapido.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="selection-layout">
+      <article class="panel">
+        <div class="panel-head">
+          <span class="panel-kicker">Empieza rapido</span>
+          <h2>Elige la dificultad</h2>
+          <p>Si quieres entrar con orden, usa los niveles. La progresion es mas clara y llegas a la partida con menos decisiones mezcladas.</p>
+        </div>
+
+        <div class="choice-stack">
+          <button class="choice-row" type="button" onclick="startByLevel(1)">
+            <span class="choice-copy">
+              <strong>Nivel 1</strong>
+              <small>Banderas y paises muy reconocibles para arrancar sin atasco.</small>
+            </span>
+          </button>
+          <button class="choice-row" type="button" onclick="startByLevel(2)">
+            <span class="choice-copy">
+              <strong>Nivel 2</strong>
+              <small>Dificultad media para consolidar memoria visual sin irte al extremo.</small>
+            </span>
+          </button>
+          <button class="choice-row" type="button" onclick="startByLevel(3)">
+            <span class="choice-copy">
+              <strong>Nivel 3</strong>
+              <small>Sesion mas dura para repasar en serio y medir si de verdad te lo sabes.</small>
+            </span>
+          </button>
+        </div>
+
+        <div class="inline-actions">
+          <button class="button-primary" type="button" onclick="startAll()">Jugar con todas las banderas</button>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <span class="panel-kicker">Entrena por region</span>
+          <h2>O centra la sesion en un continente</h2>
+          <p>Si prefieres estudiar por bloques, aqui tienes las regiones agrupadas sin repetir la misma caja una y otra vez.</p>
+        </div>
+
+        <div class="choice-grid">
+          <button class="choice-row" type="button" onclick="startByContinent('Europa')">
+            <span class="choice-copy">
+              <strong>Europa</strong>
+              <small>Buena mezcla para entrar rapido.</small>
+            </span>
+          </button>
+          <button class="choice-row" type="button" onclick="startByContinent('Asia')">
+            <span class="choice-copy">
+              <strong>Asia</strong>
+              <small>Mas variedad y mucho contraste.</small>
+            </span>
+          </button>
+          <button class="choice-row" type="button" onclick="startByContinent('Africa')">
+            <span class="choice-copy">
+              <strong>Africa</strong>
+              <small>Muy util para trabajar confusiones tipicas.</small>
+            </span>
+          </button>
+          <button class="choice-row" type="button" onclick="startByContinent('America del Norte')">
+            <span class="choice-copy">
+              <strong>Norte y Centro</strong>
+              <small>Sesion compacta y facil de repasar.</small>
+            </span>
+          </button>
+          <button class="choice-row" type="button" onclick="startByContinent('America del Sur')">
+            <span class="choice-copy">
+              <strong>America del Sur</strong>
+              <small>Buen grupo para afinar diferencias.</small>
+            </span>
+          </button>
+          <button class="choice-row" type="button" onclick="startByContinent('Oceania')">
+            <span class="choice-copy">
+              <strong>Oceania</strong>
+              <small>Rondas cortas para repasar rapido.</small>
+            </span>
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section class="info-ribbon">
+      <article class="info-pill">
+        <strong>Menos ruido</strong>
+        <p>La home deja de ser un mosaico de tarjetas y pasa a ser una decision clara en dos pasos.</p>
+      </article>
+      <article class="info-pill">
+        <strong>Mas contexto</strong>
+        <p>El filtro se conserva y se muestra despues, para que no tengas que recordar que elegiste.</p>
+      </article>
+      <article class="info-pill">
+        <strong>Mas foco</strong>
+        <p>La partida se apoya en un panel lateral y un area central grande, no en cajitas por todos lados.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

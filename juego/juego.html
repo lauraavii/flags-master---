@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Banderas</title>
+  <link rel="stylesheet" href="../assets/ui.css">
+</head>
+<body class="game-page">
+  <main class="shell">
+    <section class="game-shell">
+      <aside class="game-sidebar" id="game-sidebar">
+        <div>
+          <span class="eyebrow">Paso 3</span>
+          <h1 class="sidebar-title">La partida manda; lo demas acompana.</h1>
+          <p class="sidebar-copy">El juego se queda en el centro y las decisiones secundarias pasan a un lateral unico. Asi es bastante mas comodo cambiar modo o filtro sin romper el foco.</p>
+        </div>
+
+        <section class="context-card">
+          <div class="context-grid">
+            <div class="context-row">
+              <span>Modo</span>
+              <strong id="current-mode">Pais a 4 banderas</strong>
+            </div>
+            <div class="context-row">
+              <span>Filtro</span>
+              <strong id="current-filter">Sin filtro</strong>
+            </div>
+          </div>
+        </section>
+
+        <details class="side-drawer" open>
+          <summary>Cambiar modo</summary>
+          <div class="side-drawer-body">
+            <section class="side-drawer-section">
+              <div class="side-drawer-label">Juego</div>
+              <div class="compact-grid">
+                <button class="compact-option" type="button" onclick="changeMode('countryToFlag')">
+                  <strong>Pais a 4 banderas</strong>
+                  <small>La opcion mas simple.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="changeMode('flagToCountry4')">
+                  <strong>Bandera a 4 paises</strong>
+                  <small>Rapido y claro.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="changeMode('flagToCountry')">
+                  <strong>Bandera a escribir</strong>
+                  <small>Memoria real.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="changeMode('dragDrop')">
+                  <strong>Arrastrar</strong>
+                  <small>Mas visual.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="changeMode('countryToFlag6')">
+                  <strong>Cascada 6</strong>
+                  <small>Ronda intensa.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="changeMode('mode1minuto')">
+                  <strong>1 minuto paises</strong>
+                  <small>Sesion corta.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="changeMode('mode1minutoBanderas')">
+                  <strong>1 minuto banderas</strong>
+                  <small>Lectura visual.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="changeMode('mapMode')">
+                  <strong>Mapas</strong>
+                  <small>Mas exigente.</small>
+                </button>
+              </div>
+            </section>
+          </div>
+        </details>
+
+        <details class="side-drawer">
+          <summary>Reiniciar con otro filtro</summary>
+          <div class="side-drawer-body">
+            <section class="side-drawer-section">
+              <div class="side-drawer-label">Dificultad</div>
+              <div class="compact-grid">
+                <button class="compact-option" type="button" onclick="startGame('level', 1)">
+                  <strong>Nivel 1</strong>
+                  <small>Inicio facil.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="startGame('level', 2)">
+                  <strong>Nivel 2</strong>
+                  <small>Dificultad media.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="startGame('level', 3)">
+                  <strong>Nivel 3</strong>
+                  <small>Repaso duro.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="startGame(null, null)">
+                  <strong>Sin filtro</strong>
+                  <small>Todo el catalogo.</small>
+                </button>
+              </div>
+            </section>
+
+            <section class="side-drawer-section">
+              <div class="side-drawer-label">Region</div>
+              <div class="compact-grid">
+                <button class="compact-option" type="button" onclick="startGame('continent', 'Europa')">
+                  <strong>Europa</strong>
+                  <small>Clasico para empezar.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="startGame('continent', 'Asia')">
+                  <strong>Asia</strong>
+                  <small>Mas variedad.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="startGame('continent', 'Africa')">
+                  <strong>Africa</strong>
+                  <small>Muy util para entrenar.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="startGame('continent', 'America del Norte')">
+                  <strong>Norte y Centro</strong>
+                  <small>Sesion compacta.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="startGame('continent', 'America del Sur')">
+                  <strong>America del Sur</strong>
+                  <small>Buen bloque de repaso.</small>
+                </button>
+                <button class="compact-option" type="button" onclick="startGame('continent', 'Oceania')">
+                  <strong>Oceania</strong>
+                  <small>Ronda corta.</small>
+                </button>
+              </div>
+            </section>
+          </div>
+        </details>
+
+        <div class="inline-actions">
+          <button class="button-secondary" type="button" onclick="goHome()">Volver a modos</button>
+        </div>
+      </aside>
+
+      <section class="game-main">
+        <header class="status-ribbon">
+          <div class="score-line">
+            <div>
+              <span class="mini-label">Marcador</span>
+              <p class="scoreboard-text" id="scoreboard">0 pts | 0 aciertos | 0 fallos | 0% precision | Racha 0/0 | Mejor 0</p>
+            </div>
+            <div class="status-inline">
+              <article class="status-inline-item" id="lives-panel">
+                <span>Vidas</span>
+                <p id="vidas"></p>
+              </article>
+              <article class="status-inline-item" id="timer-panel">
+                <span>Tiempo</span>
+                <p id="timer"></p>
+              </article>
+            </div>
+          </div>
+          <p class="session-line" id="session-summary">Sesion actual: sin partidas terminadas.</p>
+        </header>
+
+        <section class="play-surface">
+          <div class="play-frame">
+            <section class="play-question-panel">
+              <div class="play-question-copy">
+                <span class="play-kicker">Pregunta actual</span>
+                <h2 id="pais"></h2>
+              </div>
+              <div class="visual-stage" id="visual-stage"></div>
+            </section>
+            <section class="play-answer-panel">
+              <div class="answer-panel-head">
+                <span class="mini-label">Respuesta</span>
+                <p class="answer-helper" id="answer-helper">Elige la opcion correcta para seguir avanzando.</p>
+              </div>
+              <div id="flags"></div>
+            </section>
+
+            <section class="game-over-banner" id="game-over">
+              <div class="game-over-shell">
+                <div class="game-over-header">
+                  <span class="mini-label" id="game-over-kicker">Fin</span>
+                  <h2 id="game-over-title">Fin de la partida</h2>
+                  <p id="game-over-copy">Puedes reiniciar la ronda, cambiar modo o volver al menu cuando quieras.</p>
+                </div>
+
+                <div class="game-over-context">
+                  <span id="game-over-mode">Modo actual</span>
+                  <span id="game-over-filter">Sin filtro</span>
+                </div>
+
+                <div class="game-over-stats">
+                  <article class="game-over-stat">
+                    <span>Puntos</span>
+                    <strong id="game-over-score">0</strong>
+                  </article>
+                  <article class="game-over-stat">
+                    <span>Precision</span>
+                    <strong id="game-over-accuracy">0%</strong>
+                  </article>
+                  <article class="game-over-stat">
+                    <span>Aciertos</span>
+                    <strong id="game-over-correct">0</strong>
+                  </article>
+                  <article class="game-over-stat">
+                    <span>Mejor racha</span>
+                    <strong id="game-over-streak">0</strong>
+                  </article>
+                </div>
+
+                <p class="game-over-summary" id="game-over-summary">Tu resumen de ronda aparece aqui al terminar.</p>
+
+                <div class="footer-actions">
+                  <button class="button-primary" type="button" onclick="restartGame()">Reintentar</button>
+                  <button class="button-secondary" type="button" onclick="focusControlPanel()">Cambiar modo o filtro</button>
+                  <button class="button-secondary" type="button" onclick="goHome()">Volver a modos</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/game.js"></script>
+</body>
+</html>
