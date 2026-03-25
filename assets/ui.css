@@ -1195,7 +1195,7 @@ body[data-game-state="ended"] .play-answer-panel {
 
 .info-table th,
 .info-table td {
-  padding: 12px 16px;
+  padding: 8px 12px;
   text-align: left;
   border-bottom: 1px solid var(--line);
   word-wrap: break-word;
@@ -1211,8 +1211,9 @@ body[data-game-state="ended"] .play-answer-panel {
 }
 
 .info-table td img {
-  height: 80px;
-  width: auto;
+  max-height: 110px;
+  max-width: 160px;
+  object-fit: contain;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
