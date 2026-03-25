@@ -1305,8 +1305,13 @@ function goHome() {
 }
 
 function showInfoTable(countries) {
-  const playFrame = document.querySelector(".play-frame");
-  if (!playFrame) return;
+  const flagsDiv = getEl("flags");
+  const paisH2 = getEl("pais");
+  if (!flagsDiv || !paisH2) return;
+
+  paisH2.textContent = "Tabla informativa";
+  setFlagsLayout("default");
+  setAnswerHelper("Consulta los datos y usa los controles laterales para cambiar modo/filtro.");
 
   let tableHTML = `
     <table class="info-table">
@@ -1337,7 +1342,7 @@ function showInfoTable(countries) {
     </table>
   `;
 
-  playFrame.innerHTML = tableHTML;
+  flagsDiv.innerHTML = tableHTML;
 }
 
 function changeMode(nextMode) {
