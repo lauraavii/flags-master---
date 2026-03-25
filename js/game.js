@@ -37,6 +37,7 @@ const VALID_MODES = new Set([
   "mode1minuto",
   "mode1minutoBanderas",
   "mapMode",
+  "infoTable",
 ]);
 
 const MODE_LABELS = {
@@ -48,6 +49,7 @@ const MODE_LABELS = {
   mode1minuto: "1 minuto de paises",
   mode1minutoBanderas: "1 minuto de banderas",
   mapMode: "Mapas",
+  infoTable: "Tabla informativa",
 };
 
 const SCORING_RULES = {
@@ -867,7 +869,11 @@ async function startGame(type = currentType, value = currentValue) {
     return;
   }
 
-  void showRound();
+  if (mode === "infoTable") {
+    showInfoTable(paises);
+  } else {
+    void showRound();
+  }
 }
 
 async function showRound() {
@@ -1296,6 +1302,40 @@ function focusControlPanel() {
 
 function goHome() {
   window.location.href = isSubFolderGame ? "modos.html" : "juego/modos.html";
+}
+
+function showInfoTable(countries) {
+  const playFrame = document.querySelector(".play-frame");
+  if (!playFrame) return;
+
+  let tableHTML = `
+    <table class="info-table">
+      <thead>
+        <tr>
+          <th>País</th>
+          <th>Capital</th>
+          <th>Bandera</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  countries.forEach(country => {
+    tableHTML += `
+      <tr>
+        <td>${country.pais}</td>
+        <td>${country.capital}</td>
+        <td><img src="${getFlagSrc(country)}" alt="Bandera de ${country.pais}" style="width: 50px; height: auto;"></td>
+      </tr>
+    `;
+  });
+
+  tableHTML += `
+      </tbody>
+    </table>
+  `;
+
+  playFrame.innerHTML = tableHTML;
 }
 
 function changeMode(nextMode) {

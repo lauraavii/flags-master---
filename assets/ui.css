@@ -1161,6 +1161,38 @@ body[data-game-state="ended"] .play-answer-panel {
     min-height: clamp(220px, 16vw, 320px);
     max-height: 340px;
   }
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.info-table th,
+.info-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.info-table th {
+  background: var(--panel);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.info-table td img {
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.info-table tbody tr:hover {
+  background: var(--panel-strong);
+}
 
   body[data-game-mode="countryToFlag6"] #flags[data-layout="cascade-grid"] img {
     min-height: clamp(190px, 14vw, 290px);
