@@ -1320,12 +1320,14 @@ function showInfoTable(countries) {
       <tbody>
   `;
 
-  countries.forEach(country => {
+  const sortedCountries = [...countries].sort((a, b) => a.pais.localeCompare(b.pais));
+
+  sortedCountries.forEach(country => {
     tableHTML += `
       <tr>
         <td>${country.pais}</td>
         <td>${country.capital}</td>
-        <td><img src="${getFlagSrc(country)}" alt="Bandera de ${country.pais}" style="width: 50px; height: auto;"></td>
+        <td><img src="${getFlagSrc(country)}" alt="Bandera de ${country.pais}"></td>
       </tr>
     `;
   });

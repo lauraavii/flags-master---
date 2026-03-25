@@ -569,6 +569,13 @@ body.game-page .shell {
   transition: filter 220ms ease, opacity 220ms ease, transform 220ms ease;
 }
 
+body[data-game-mode="infoTable"] .play-frame {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: 0;
+}
+
 .play-question-panel,
 .play-answer-panel {
   min-width: 0;
@@ -1165,11 +1172,40 @@ body[data-game-state="ended"] .play-answer-panel {
 
 .info-table {
   width: 100%;
+  height: 100%;
   border-collapse: collapse;
   background: var(--surface);
   border-radius: var(--radius-md);
-  overflow: hidden;
+  overflow: auto;
   box-shadow: var(--shadow);
+  table-layout: fixed;
+}
+
+body[data-game-mode="infoTable"] .play-question-panel {
+  display: none;
+}
+
+body[data-game-mode="infoTable"] .play-answer-panel {
+  grid-column: 1;
+  min-height: 100%;
+}
+
+body[data-game-mode="infoTable"] #flags {
+  width: 100%;
+  height: 100%;
+  display: contents;
+}
+
+.info-table th:nth-child(1),
+.info-table th:nth-child(2),
+.info-table th:nth-child(3) {
+  width: 33.33%;
+}
+
+.info-table td:nth-child(1),
+.info-table td:nth-child(2),
+.info-table td:nth-child(3) {
+  width: 33.33%;
 }
 
 .info-table th,
@@ -1177,16 +1213,21 @@ body[data-game-state="ended"] .play-answer-panel {
   padding: 12px 16px;
   text-align: left;
   border-bottom: 1px solid var(--line);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .info-table th {
   background: var(--panel);
   font-weight: 600;
   color: var(--primary);
+  position: sticky;
+  top: 0;
 }
 
 .info-table td img {
-  border-radius: var(--radius-sm);
+  height: 80px;
+  width: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
