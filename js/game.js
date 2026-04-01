@@ -38,6 +38,7 @@ const VALID_MODES = new Set([
   "mode1minutoBanderas",
   "mapMode",
   "infoTable",
+  "dailyChallenge",
 ]);
 
 const MODE_LABELS = {
@@ -50,6 +51,7 @@ const MODE_LABELS = {
   mode1minutoBanderas: "1 minuto de banderas",
   mapMode: "Mapas",
   infoTable: "Tabla informativa",
+  dailyChallenge: "Reto Diario",
 };
 
 const SCORING_RULES = {
@@ -61,10 +63,13 @@ const SCORING_RULES = {
   mode1minuto: { correct: 8, wrong: 3 },
   mode1minutoBanderas: { correct: 8, wrong: 3 },
   mapMode: { correct: 18, wrong: 7 },
+  dailyChallenge: { correct: 14, wrong: 5 },
   default: { correct: 10, wrong: 5 },
 };
 
 const TIMED_MODES = new Set(["mode1minuto", "mode1minutoBanderas"]);
+const DAILY_QUESTIONS = 20;
+let dailyQuestionTypes = [];
 const MAP_ENABLED_CONTINENTS = new Set(["europa", "africa", "asia", "oceania", "america del norte", "america del sur",]);
 
 const CONTINENT_ALIASES = {
@@ -162,6 +167,76 @@ function shuffle(arr) {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+}
+
+function hashString(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) + h + str.charCodeAt(i)) & 0xffffffff;
+  }
+  return h >>> 0;
+}
+
+function createSeededRng(seed) {
+  let s = seed === 0 ? 1 : seed;
+  return function () {
+    s ^= s << 13;
+    s ^= s >> 17;
+    s ^= s << 5;
+    return (s >>> 0) / 4294967295;
+  };
+}
+
+function seededShuffle(arr, rng) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function getDailyDateKey() {
+  const n = new Date();
+  return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, "0")}-${String(n.getDate()).padStart(2, "0")}`;
+}
+
+function buildDailyChallenge(allCountries) {
+  const dateKey = getDailyDateKey();
+  const rng = createSeededRng(hashString(dateKey));
+  const selected = seededShuffle(allCountries, rng).slice(0, Math.min(DAILY_QUESTIONS, allCountries.length));
+  const rng2 = createSeededRng(hashString(dateKey + ":types"));
+  dailyQuestionTypes = selected.map(() => (rng2() < 0.55 ? "countryToFlag" : "flagToCountry4"));
+  return selected;
+}
+
+function getDailyStorageKey() {
+  return `dailyChallenge.${getDailyDateKey()}`;
+}
+
+function saveDailyCompletion(score, accuracy) {
+  try {
+    localStorage.setItem(getDailyStorageKey(), JSON.stringify({ score, accuracy, at: new Date().toISOString() }));
+  } catch (_e) {
+    // no-op
+  }
+}
+
+function getTodaysDailyResult() {
+  try {
+    const raw = localStorage.getItem(getDailyStorageKey());
+    return raw ? JSON.parse(raw) : null;
+  } catch (_e) {
+    return null;
+  }
+}
+
+function updateDailyBadge() {
+  const badge = getEl("daily-badge");
+  if (!badge) return;
+  const result = getTodaysDailyResult();
+  badge.textContent = result ? `Completado · ${result.score} pts` : "";
+  badge.style.display = result ? "block" : "none";
 }
 
 function toggleDisplay(id, visible, defaultDisplay = "block") {
@@ -345,18 +420,14 @@ function persistCurrentScoreState() {
 }
 
 function updateScoreboard() {
-  const scoreboard = getEl("scoreboard");
-  if (!scoreboard || !scoreState) return;
-
+  if (!scoreState) return;
   const bestScore = getSessionBestScore();
-  scoreboard.textContent = [
-    `${scoreState.score} pts`,
-    `${scoreState.correct} aciertos`,
-    `${scoreState.wrong} fallos`,
-    `${scoreState.accuracy}% precision`,
-    `Racha ${scoreState.streak}/${scoreState.bestStreak}`,
-    `Mejor ${bestScore}`,
-  ].join(" | ");
+  setText("stat-score", String(scoreState.score));
+  setText("stat-correct", String(scoreState.correct));
+  setText("stat-wrong", String(scoreState.wrong));
+  setText("stat-accuracy", `${scoreState.accuracy}%`);
+  setText("stat-streak", `${scoreState.streak}/${scoreState.bestStreak}`);
+  setText("stat-best", String(bestScore));
 }
 
 function updateSessionSummary() {
@@ -489,6 +560,13 @@ function getDataPathCandidates() {
 async function loadCountries() {
   if (COUNTRIES.length > 0) return true;
 
+  // Datos inline (data.js) — funciona con file:// sin CORS
+  if (Array.isArray(window.COUNTRIES_DATA) && window.COUNTRIES_DATA.length > 0) {
+    COUNTRIES = [...window.COUNTRIES_DATA];
+    return true;
+  }
+
+  // Fallback: fetch (solo funciona con http/https)
   for (const path of getDataPathCandidates()) {
     try {
       const res = await fetch(path);
@@ -498,11 +576,6 @@ async function loadCountries() {
     } catch (_err) {
       // Intentar siguiente path
     }
-  }
-
-  if (Array.isArray(window.COUNTRIES_DATA) && window.COUNTRIES_DATA.length > 0) {
-    COUNTRIES = [...window.COUNTRIES_DATA];
-    return true;
   }
 
   showMessage("No se pudo cargar data/countries.json");
@@ -532,7 +605,6 @@ async function buildFilteredCountries(type, value) {
     );
   }
 }
-console.log("VALUE:", value);
 
 
   if (isMapMode()) {
@@ -723,6 +795,7 @@ async function renderMapMode(correcto) {
 }
 
 function updateGameOverPanel(status) {
+  const isDaily = mode === "dailyChallenge";
   const states = {
     game_over: {
       kicker: "Sin vidas",
@@ -730,9 +803,11 @@ function updateGameOverPanel(status) {
       copy: "La ronda termina aqui, pero puedes reiniciarla al instante o bajar a los controles para cambiar el enfoque.",
     },
     completado: {
-      kicker: "Ronda completada",
-      title: "Has completado toda la ronda",
-      copy: "Buen cierre. Puedes repetir la misma configuracion o usar el panel lateral para apretar un poco mas la dificultad.",
+      kicker: isDaily ? "Reto del dia completado" : "Ronda completada",
+      title: isDaily ? "Lo has conseguido" : "Has completado toda la ronda",
+      copy: isDaily
+        ? "Has terminado el reto de hoy. Vuelve manana para un nuevo desafio."
+        : "Buen cierre. Puedes repetir la misma configuracion o usar el panel lateral para apretar un poco mas la dificultad.",
     },
     tiempo_finalizado: {
       kicker: "Tiempo agotado",
@@ -756,13 +831,19 @@ function updateGameOverPanel(status) {
   let summary = `Has respondido ${answered} preguntas en ${MODE_LABELS[mode] || mode}.`;
 
   if (status === "game_over") {
-    summary = `Te has quedado sin vidas con ${scoreState?.score ?? 0} puntos y ${scoreState?.accuracy ?? 0}% de precision.`;
+    summary = `Te has quedado sin vidas con ${scoreState?.score ?? 0} puntos y ${scoreState?.accuracy ?? 0}% de precisión.`;
   } else if (status === "completado") {
-    summary = `Has completado ${answered} preguntas con ${scoreState?.score ?? 0} puntos y una mejor racha de ${scoreState?.bestStreak ?? 0}.`;
+    if (mode === "dailyChallenge") {
+      summary = `Reto del día completado con ${scoreState?.score ?? 0} puntos y ${scoreState?.accuracy ?? 0}% de precisión. Vuelve manana.`;
+      saveDailyCompletion(scoreState?.score ?? 0, scoreState?.accuracy ?? 0);
+      updateDailyBadge();
+    } else {
+      summary = `Has completado ${answered} preguntas con ${scoreState?.score ?? 0} puntos y una mejor racha de ${scoreState?.bestStreak ?? 0}.`;
+    }
   } else if (status === "tiempo_finalizado") {
     summary = `Has cerrado el cronometro con ${puntos} aciertos visuales y ${scoreState?.score ?? 0} puntos totales.`;
   } else if (status === "sin_datos") {
-    summary = "Prueba con otra region, otro nivel o vuelve al selector de modos.";
+    summary = "Prueba con otra región, otro nivel o vuelve al selector de modos.";
   }
 
   setText("game-over-kicker", config.kicker);
@@ -817,9 +898,10 @@ function clearMainContainers() {
   const paisH2 = getEl("pais");
   if (flagsDiv) flagsDiv.innerHTML = "";
   setFlagsLayout("default");
-  setAnswerHelper("Elige la opcion correcta para seguir avanzando.");
+  setAnswerHelper("Elige la opción correcta para seguir avanzando.");
   clearVisualStage();
   if (paisH2) paisH2.textContent = "";
+  if (mode !== "dailyChallenge") delete document.body.dataset.dailyQtype;
 }
 
 function isFinished() {
@@ -856,13 +938,18 @@ async function startGame(type = currentType, value = currentValue) {
   setText("timer", "");
   updateStatusPanels();
 
-  paises = shuffle(await buildFilteredCountries(currentType, currentValue));
+  if (mode === "dailyChallenge") {
+    paises = buildDailyChallenge(COUNTRIES);
+  } else {
+    paises = shuffle(await buildFilteredCountries(currentType, currentValue));
+  }
 
   initializeScoreState();
   updateLives();
+  updateDailyBadge();
 
   if (paises.length === 0) {
-    showMessage("No hay paises disponibles con este filtro.");
+    showMessage("No hay países disponibles con este filtro.");
     finalizeScore("sin_datos");
     updateGameOverPanel("sin_datos");
     setGameOverVisible(true);
@@ -889,7 +976,7 @@ async function showRound() {
   }
 
   if (paises.length === 0) {
-    showMessage("No hay paises disponibles con este filtro.");
+    showMessage("No hay países disponibles con este filtro.");
     return;
   }
 
@@ -935,6 +1022,9 @@ async function showRound() {
     case "mapMode":
       await renderMapMode(correcto);
       break;
+    case "dailyChallenge":
+      renderDailyChallenge(correcto);
+      break;
     default:
       mode = "countryToFlag";
       setPreference(SESSION_KEYS.mode, mode);
@@ -949,7 +1039,7 @@ function renderCountryToFlag(correcto) {
   if (!flagsDiv) return;
 
   setFlagsLayout("image-grid");
-  setAnswerHelper("Toca la bandera que corresponde al pais.");
+  setAnswerHelper("Toca la bandera que corresponde al país.");
   setText("pais", correcto.pais);
 
   const opciones = getMultipleChoiceOptions(correcto, 4);
@@ -968,7 +1058,7 @@ function renderFlagToCountry4(correcto) {
 
   setFlagsLayout("button-grid");
   setAnswerHelper("Lee la bandera y elige el nombre correcto.");
-  setText("pais", "Selecciona el pais correcto");
+  setText("pais", "Selecciona el país correcto");
   renderVisualImage(getFlagSrc(correcto), `Bandera de ${correcto.pais}`);
 
   const opciones = getMultipleChoiceOptions(correcto, 4);
@@ -985,12 +1075,12 @@ function renderFlagToCountry(correcto) {
   if (!flagsDiv) return;
 
   setFlagsLayout("form");
-  setAnswerHelper("Escribe el nombre del pais y confirma.");
-  setText("pais", "Escribe el pais de la bandera");
+  setAnswerHelper("Escribe el nombre del país y confirma.");
+  setText("pais", "Escribe el país de la bandera");
   renderVisualImage(getFlagSrc(correcto), `Bandera de ${correcto.pais}`);
 
   const input = document.createElement("input");
-  input.placeholder = "Escribe el pais";
+  input.placeholder = "Escribe el país";
   flagsDiv.appendChild(input);
 
   const btn = document.createElement("button");
@@ -1008,8 +1098,8 @@ function renderDragDrop() {
   if (!flagsDiv) return;
 
   setFlagsLayout("drag");
-  setAnswerHelper("Relaciona cada bandera con su pais antes de quedarte sin vidas.");
-  setText("pais", "Arrastra cada bandera a su pais");
+  setAnswerHelper("Relaciona cada bandera con su país antes de quedarte sin vidas.");
+  setText("pais", "Arrastra cada bandera a su país");
 
   const opciones = paises.slice(actual, actual + 4);
   if (opciones.length === 0) {
@@ -1147,7 +1237,7 @@ function iniciarModo1Minuto() {
   }
 
   setAnswerHelper("Acumula aciertos antes de que se agote el tiempo.");
-  setText("pais", "Que pais es esta bandera?");
+  setText("pais", "¿Qué país es esta bandera?");
   startTimedMode();
   nuevaPregunta1Minuto();
 }
@@ -1286,6 +1376,48 @@ function renderCountryToFlag6() {
   });
 }
 
+function renderDailyChallenge(correcto) {
+  const flagsDiv = getEl("flags");
+  if (!flagsDiv || !correcto) return;
+
+  const total = paises.length;
+  const qType = dailyQuestionTypes[actual] || "countryToFlag";
+
+  // Marca el tipo de pregunta en body para que CSS adapte el layout
+  document.body.dataset.dailyQtype = qType;
+
+  if (qType === "flagToCountry4") {
+    setFlagsLayout("button-grid");
+    setAnswerHelper(`Pregunta ${actual + 1} de ${total}  —  Lee la bandera y elige el pais correcto`);
+    setText("pais", "¿Qué pais es esta bandera?");
+    renderVisualImage(getFlagSrc(correcto), `Bandera de ${correcto.pais}`);
+
+    const opciones = getMultipleChoiceOptions(correcto, 4);
+    flagsDiv.innerHTML = "";
+    opciones.forEach(p => {
+      const btn = document.createElement("button");
+      btn.textContent = p.pais;
+      btn.onclick = () => checkAnswer(p.pais, "dailyChallenge");
+      flagsDiv.appendChild(btn);
+    });
+  } else {
+    setFlagsLayout("image-grid");
+    setAnswerHelper(`Pregunta ${actual + 1} de ${total}  —  Toca la bandera del pais correcto`);
+    setText("pais", correcto.pais);
+    clearVisualStage();
+
+    const opciones = getMultipleChoiceOptions(correcto, 4);
+    flagsDiv.innerHTML = "";
+    opciones.forEach(p => {
+      const img = document.createElement("img");
+      img.src = getFlagSrc(p);
+      img.alt = `Bandera de ${p.pais}`;
+      img.onclick = () => checkAnswer(p.pais, "dailyChallenge");
+      flagsDiv.appendChild(img);
+    });
+  }
+}
+
 function restartGame() {
   void startGame(currentType, currentValue);
 }
@@ -1301,7 +1433,7 @@ function focusControlPanel() {
 }
 
 function goHome() {
-  window.location.href = isSubFolderGame ? "modos.html" : "juego/modos.html";
+  window.location.href = isSubFolderGame ? "../index.html" : "index.html";
 }
 
 function showInfoTable(countries) {
@@ -1359,6 +1491,7 @@ window.restartGame = restartGame;
 window.focusControlPanel = focusControlPanel;
 window.goHome = goHome;
 window.changeMode = changeMode;
+window.getDailyDateKey = getDailyDateKey;
 
 document.addEventListener("DOMContentLoaded", () => {
   void startGame();

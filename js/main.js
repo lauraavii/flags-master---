@@ -14,15 +14,6 @@ function safeRemoveSessionValue(key) {
   }
 }
 
-function goToModesPage() {
-  const currentPath = window.location.pathname.replace(/\\/g, "/");
-  const isAtRoot =
-    currentPath.endsWith("/index.html") ||
-    !currentPath.includes("/juego/");
-
-  window.location.href = isAtRoot ? "juego/modos.html" : "modos.html";
-}
-
 function setFilter(type, value) {
   if (!type) {
     safeRemoveSessionValue("type");
@@ -32,7 +23,9 @@ function setFilter(type, value) {
     safeSetSessionValue("value", String(value));
   }
 
-  goToModesPage();
+  // Navigate directly to game.html (same directory as index.html — avoids
+  // cross-directory file:// security restrictions in Chrome)
+  window.location.href = "game.html";
 }
 
 function startByLevel(level) {
@@ -45,4 +38,9 @@ function startByContinent(continent) {
 
 function startAll() {
   setFilter(null, null);
+}
+
+function startDaily() {
+  try { sessionStorage.setItem("mode", "dailyChallenge"); } catch(_e) {}
+  window.location.href = "game.html";
 }

@@ -11,8 +11,8 @@
     <section class="hero-panel">
       <div>
         <span class="eyebrow">Paso 2</span>
-        <h1 class="hero-title">Elige como quieres responder y pasa a jugar.</h1>
-        <p class="hero-text">Aqui ya no hace falta releer todo. Los modos estan agrupados por uso real: los mas claros a un lado y los especiales al otro. El filtro anterior se mantiene y se muestra arriba.</p>
+        <h1 class="hero-title">Elige como quieres jugar</h1>
+        <p class="hero-text">Los modos estan agrupados por uso real. El filtro anterior se mantiene y aparece arriba.</p>
         <div class="hero-summary">
           <span>Reconocer</span>
           <span>Escribir</span>
@@ -24,42 +24,58 @@
       <aside class="context-card">
         <div class="context-label">Filtro activo</div>
         <p class="context-value" id="selected-filter">Sin filtro</p>
-        <p class="context-note">Si quieres cambiar la region o la dificultad, vuelve al inicio. Si no, solo elige modo y entra directo.</p>
+        <p class="context-note">Si quieres cambiar la región o la dificultad, vuelve al inicio. Si no, elige modo y entra directo.</p>
         <div class="inline-actions">
           <button class="button-secondary" type="button" onclick="goHome()">Cambiar filtro</button>
         </div>
       </aside>
     </section>
 
+    <!-- Reto Diario destacado -->
+    <section class="daily-featured">
+      <button class="daily-featured-btn" type="button" onclick="startDailyDirect()">
+        <div class="daily-featured-left">
+          <span class="daily-featured-kicker">Reto del día</span>
+          <strong class="daily-featured-title">Reto Diario</strong>
+          <span class="daily-featured-desc">20 preguntas fijas para hoy. Mezcla de modos. Sin límite de tiempo. Igual para todos.</span>
+        </div>
+        <div class="daily-featured-right">
+          <span class="daily-featured-date" id="daily-feat-date"></span>
+          <span class="daily-featured-tag">Nuevo cada día</span>
+          <span class="daily-result" id="daily-feat-result" style="display:none"></span>
+        </div>
+      </button>
+    </section>
+
     <section class="mode-layout">
       <article class="panel">
         <div class="panel-head">
           <span class="panel-kicker">Modos recomendados</span>
-          <h2>Los mas claros para jugar comodo</h2>
-          <p>Estos tres tienen la lectura mas limpia y suelen ser los mejores para empezar sin perder tiempo entendiendo la mecanica.</p>
+          <h2>Los más claros para jugar cómodo</h2>
+          <p>Estos tres tienen la lectura mas limpia y suelen ser los mejores para empezar.</p>
         </div>
 
         <div class="mode-list">
           <button class="mode-row mode-row-accent" type="button" onclick="startMode('countryToFlag')">
             <span class="mode-copy">
-              <strong>Pais a 4 banderas</strong>
-              <span>La opcion mas directa para relacionar nombre y bandera sin friccion.</span>
+              <strong>País a 4 banderas</strong>
+              <span>La opción más directa para relacionar nombre y bandera</span>
             </span>
             <span class="mode-tag">Facil</span>
           </button>
 
           <button class="mode-row" type="button" onclick="startMode('flagToCountry4')">
             <span class="mode-copy">
-              <strong>Bandera a 4 paises</strong>
-              <span>Buena para leer rapido y afinar el reconocimiento visual.</span>
+              <strong>Bandera a 4 países</strong>
+              <span>Buena para leer rápido y afinar el reconocimiento visual</span>
             </span>
             <span class="mode-tag">Rapido</span>
           </button>
 
           <button class="mode-row" type="button" onclick="startMode('flagToCountry')">
             <span class="mode-copy">
-              <strong>Bandera a escribir pais</strong>
-              <span>La mejor para comprobar recuerdo real en vez de simple reconocimiento.</span>
+              <strong>Bandera a escribir país</strong>
+              <span>La mejor para comprobar recuerdo real en vez de simple reconocimiento</span>
             </span>
             <span class="mode-tag">Memoria</span>
           </button>
@@ -69,15 +85,15 @@
       <article class="panel">
         <div class="panel-head">
           <span class="panel-kicker">Especiales</span>
-          <h2>Modos rapidos y variantes</h2>
-          <p>El resto queda recogido en una lista unica, sin duplicar estructuras. Asi puedes compararlos y cambiar sin sentir que estas en otro menu.</p>
+          <h2>Modos rápidos y variantes</h2>
+          <p>El resto recogido en una lista única, sin duplicar estructuras.</p>
         </div>
 
         <div class="mode-list">
           <button class="mode-row" type="button" onclick="startMode('dragDrop')">
             <span class="mode-copy">
-              <strong>Arrastrar bandera a pais</strong>
-              <span>Mas visual, con varias piezas en pantalla a la vez.</span>
+              <strong>Arrastrar bandera a país</strong>
+              <span>Más visual, con varias piezas en pantalla a la vez</span>
             </span>
             <span class="mode-tag">Visual</span>
           </button>
@@ -85,15 +101,15 @@
           <button class="mode-row" type="button" onclick="startMode('countryToFlag6')">
             <span class="mode-copy">
               <strong>Cascada de 6 banderas</strong>
-              <span>Ronda mas intensa con bonus por limpiar la tanda completa.</span>
+              <span>Ronda más intensa con bonus por limpiar la tanda completa</span>
             </span>
             <span class="mode-tag">Racha</span>
           </button>
 
           <button class="mode-row" type="button" onclick="startMode('mode1minuto')">
             <span class="mode-copy">
-              <strong>1 minuto de paises</strong>
-              <span>Sesion corta para medir ritmo, precision y reflejos.</span>
+              <strong>1 minuto de países</strong>
+              <span>Sesión corta para medir ritmo, precisión y reflejos</span>
             </span>
             <span class="mode-tag">Tiempo</span>
           </button>
@@ -101,7 +117,7 @@
           <button class="mode-row" type="button" onclick="startMode('mode1minutoBanderas')">
             <span class="mode-copy">
               <strong>1 minuto de banderas</strong>
-              <span>La variante rapida centrada en lectura visual pura.</span>
+              <span>La variante rápida centrada en lectura visual pura</span>
             </span>
             <span class="mode-tag">Tiempo</span>
           </button>
@@ -109,7 +125,7 @@
           <button class="mode-row" type="button" onclick="startMode('mapMode')">
             <span class="mode-copy">
               <strong>Modo mapas</strong>
-              <span>Mas exigente. Solo tiene sentido con Europa y Africa.</span>
+              <span>Más exigente. Solo tiene sentido con Europa y África</span>
             </span>
             <span class="mode-tag">Dificil</span>
           </button>
@@ -117,9 +133,9 @@
           <button class="mode-row" type="button" onclick="startMode('infoTable')">
             <span class="mode-copy">
               <strong>Tabla informativa</strong>
-              <span>Ver paises, capitales y banderas en una tabla.</span>
+              <span>Ver paises, capitales y banderas en una tabla</span>
             </span>
-            <span class="mode-tag">Informativo</span>
+            <span class="mode-tag">Info</span>
           </button>
         </div>
       </article>
@@ -147,11 +163,39 @@
     window.location.href = "juego.html";
   }
 
+  function startDailyDirect() {
+    sessionStorage.setItem("mode", "dailyChallenge");
+    window.location.href = "juego.html";
+  }
+
   function goHome() {
     window.location.href = "../index.html";
   }
 
+  function hydrateDailyInfo() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+    const el = document.getElementById('daily-feat-date');
+    if (el) el.textContent = dateStr;
+
+    // Check localStorage for completion
+    const dateKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const storageKey = `dailyChallenge.${dateKey}`;
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (raw) {
+        const data = JSON.parse(raw);
+        const resultEl = document.getElementById('daily-feat-result');
+        if (resultEl) {
+          resultEl.textContent = `Completado — ${data.score} pts`;
+          resultEl.style.display = 'inline-block';
+        }
+      }
+    } catch(_e) {}
+  }
+
   hydrateFilterLabel();
+  hydrateDailyInfo();
   </script>
 </body>
 </html>

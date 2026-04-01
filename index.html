@@ -3,134 +3,205 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Juego de Banderas</title>
+  <title>Banderas del mundo</title>
   <link rel="stylesheet" href="assets/ui.css">
 </head>
-<body>
-  <main class="shell">
-    <section class="hero-panel">
-      <div>
-        <span class="eyebrow">Juego de banderas</span>
-        <h1 class="hero-title">Aprende mas rapido con una interfaz que se entiende al primer vistazo.</h1>
-        <p class="hero-text">He compactado el flujo para que no tengas veinte cajas peleando por tu atencion. Primero eliges el filtro, luego el modo y despues juegas con la informacion importante siempre a la vista.</p>
-        <div class="hero-summary">
-          <span>1. Filtra</span>
-          <span>2. Elige modo</span>
-          <span>3. Juega sin ruido</span>
+<body class="home-page">
+  <main class="home-shell">
+
+    <!-- ═══ HERO ═══════════════════════════════════════════ -->
+    <section class="home-hero">
+      <div class="home-hero-inner">
+
+        <!-- Texto -->
+        <div class="home-hero-copy">
+          <span class="eyebrow">Juego de banderas</span>
+          <h1 class="hero-title">Aprende las<br>banderas<br>del mundo</h1>
+          <p class="hero-tagline">Reconoce, recuerda y mejora tu memoria visual.<br class="br-desktop">Elige modo y empieza en segundos.</p>
+
+          <!-- CTA principal: Reto Diario -->
+          <button class="hero-daily-btn" id="hero-daily-btn" onclick="startDaily()">
+            <div class="hero-daily-btn-body">
+              <span class="hero-daily-btn-kicker">Reto del día — <span id="hero-date-label"></span></span>
+              <strong class="hero-daily-btn-title">Empezar Reto Diario</strong>
+              <span class="hero-daily-btn-sub">20 preguntas fijas para hoy. Sin tiempo.</span>
+            </div>
+            <span class="hero-daily-btn-arrow">→</span>
+          </button>
+
+          <div class="hero-done-bar" id="hero-done-bar" style="display:none">
+            <span class="hero-done-icon">✓</span>
+            <span id="hero-done-text">Reto completado hoy</span>
+            <button class="hero-done-replay" onclick="startDaily()">Repetir</button>
+          </div>
+
+          <!-- Chips de características -->
+          <div class="hero-chips">
+            <span>250+ países</span>
+            <span>8 modos</span>
+            <span>Reto diario</span>
+            <span>Sin registro</span>
+          </div>
         </div>
+
+        <!-- Mosaico de banderas -->
+        <div class="home-hero-visual" aria-hidden="true">
+          <div class="flags-mosaic" id="flags-mosaic"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ FILTRO Y MODOS ══════════════════════════════════ -->
+    <section class="home-filters-section">
+      <div class="home-section-head">
+        <span class="eyebrow">O elige tu filtro y modo</span>
+        <h2 class="home-section-title">Selecciona por dónde empezar</h2>
       </div>
 
-      <aside class="hero-card">
-        <div>
-          <strong>Ahora el menu principal sirve para decidir rapido, no para marearte.</strong>
-          <p>Dos paneles, acciones mas directas y un recorrido mucho mas corto hasta la partida.</p>
-        </div>
-        <ul class="hero-card-list">
-          <li>Los niveles estan juntos en un solo bloque claro.</li>
-          <li>Las regiones se leen de un vistazo y sin tarjetas gigantes.</li>
-          <li>El modo libre queda destacado como acceso rapido.</li>
-        </ul>
-      </aside>
+      <div class="selection-layout">
+
+        <!-- Dificultad -->
+        <article class="panel">
+          <div class="panel-head">
+            <span class="panel-kicker">Por dificultad</span>
+            <h2>Elige el nivel</h2>
+            <p>Desde las banderas mas reconocibles hasta el catálogo completo.</p>
+          </div>
+          <div class="choice-stack">
+            <button class="choice-row" type="button" onclick="startByLevel(1)">
+              <span class="choice-copy">
+                <strong>Nivel 1</strong>
+                <small>Paises y banderas muy reconocibles para arrancar sin atasco</small>
+              </span>
+              <span class="choice-badge choice-badge--easy">Facil</span>
+            </button>
+            <button class="choice-row" type="button" onclick="startByLevel(2)">
+              <span class="choice-copy">
+                <strong>Nivel 2</strong>
+                <small>Dificultad media para consolidar memoria visual</small>
+              </span>
+              <span class="choice-badge choice-badge--mid">Medio</span>
+            </button>
+            <button class="choice-row" type="button" onclick="startByLevel(3)">
+              <span class="choice-copy">
+                <strong>Nivel 3</strong>
+                <small>Sesión mas dura para repasar en serio</small>
+              </span>
+              <span class="choice-badge choice-badge--hard">Difícil</span>
+            </button>
+          </div>
+          <div class="inline-actions">
+            <button class="button-primary" type="button" onclick="startAll()">Todas las banderas</button>
+          </div>
+        </article>
+
+        <!-- Region -->
+        <article class="panel">
+          <div class="panel-head">
+            <span class="panel-kicker">Por región</span>
+            <h2>Centra la sesión</h2>
+            <p>Si prefieres estudiar por bloques geográficos, elige un continente.</p>
+          </div>
+          <div class="choice-grid">
+            <button class="choice-row choice-row--continent" type="button" onclick="startByContinent('Europa')">
+              <span class="choice-copy">
+                <strong>Europa</strong>
+                <small>Buena mezcla para entrar rápido</small>
+              </span>
+            </button>
+            <button class="choice-row choice-row--continent" type="button" onclick="startByContinent('Asia')">
+              <span class="choice-copy">
+                <strong>Asia</strong>
+                <small>Variedad y mucho contraste</small>
+              </span>
+            </button>
+            <button class="choice-row choice-row--continent" type="button" onclick="startByContinent('Africa')">
+              <span class="choice-copy">
+                <strong>Africa</strong>
+                <small>Útil para trabajar confusiones típicas</small>
+              </span>
+            </button>
+            <button class="choice-row choice-row--continent" type="button" onclick="startByContinent('America del Norte')">
+              <span class="choice-copy">
+                <strong>America Norte y Centro</strong>
+                <small>Sesión compacta y fácil de repasar</small>
+              </span>
+            </button>
+            <button class="choice-row choice-row--continent" type="button" onclick="startByContinent('America del Sur')">
+              <span class="choice-copy">
+                <strong>América del Sur</strong>
+                <small>Buen grupo para afinar diferencias</small>
+              </span>
+            </button>
+            <button class="choice-row choice-row--continent" type="button" onclick="startByContinent('Oceania')">
+              <span class="choice-copy">
+                <strong>Oceanía</strong>
+                <small>Rondas cortas para repasar rápido</small>
+              </span>
+            </button>
+          </div>
+        </article>
+
+      </div>
     </section>
 
-    <section class="selection-layout">
-      <article class="panel">
-        <div class="panel-head">
-          <span class="panel-kicker">Empieza rapido</span>
-          <h2>Elige la dificultad</h2>
-          <p>Si quieres entrar con orden, usa los niveles. La progresion es mas clara y llegas a la partida con menos decisiones mezcladas.</p>
-        </div>
-
-        <div class="choice-stack">
-          <button class="choice-row" type="button" onclick="startByLevel(1)">
-            <span class="choice-copy">
-              <strong>Nivel 1</strong>
-              <small>Banderas y paises muy reconocibles para arrancar sin atasco.</small>
-            </span>
-          </button>
-          <button class="choice-row" type="button" onclick="startByLevel(2)">
-            <span class="choice-copy">
-              <strong>Nivel 2</strong>
-              <small>Dificultad media para consolidar memoria visual sin irte al extremo.</small>
-            </span>
-          </button>
-          <button class="choice-row" type="button" onclick="startByLevel(3)">
-            <span class="choice-copy">
-              <strong>Nivel 3</strong>
-              <small>Sesion mas dura para repasar en serio y medir si de verdad te lo sabes.</small>
-            </span>
-          </button>
-        </div>
-
-        <div class="inline-actions">
-          <button class="button-primary" type="button" onclick="startAll()">Jugar con todas las banderas</button>
-        </div>
-      </article>
-
-      <article class="panel">
-        <div class="panel-head">
-          <span class="panel-kicker">Entrena por region</span>
-          <h2>O centra la sesion en un continente</h2>
-          <p>Si prefieres estudiar por bloques, aqui tienes las regiones agrupadas sin repetir la misma caja una y otra vez.</p>
-        </div>
-
-        <div class="choice-grid">
-          <button class="choice-row" type="button" onclick="startByContinent('Europa')">
-            <span class="choice-copy">
-              <strong>Europa</strong>
-              <small>Buena mezcla para entrar rapido.</small>
-            </span>
-          </button>
-          <button class="choice-row" type="button" onclick="startByContinent('Asia')">
-            <span class="choice-copy">
-              <strong>Asia</strong>
-              <small>Mas variedad y mucho contraste.</small>
-            </span>
-          </button>
-          <button class="choice-row" type="button" onclick="startByContinent('Africa')">
-            <span class="choice-copy">
-              <strong>Africa</strong>
-              <small>Muy util para trabajar confusiones tipicas.</small>
-            </span>
-          </button>
-          <button class="choice-row" type="button" onclick="startByContinent('America del Norte')">
-            <span class="choice-copy">
-              <strong>Norte y Centro</strong>
-              <small>Sesion compacta y facil de repasar.</small>
-            </span>
-          </button>
-          <button class="choice-row" type="button" onclick="startByContinent('America del Sur')">
-            <span class="choice-copy">
-              <strong>America del Sur</strong>
-              <small>Buen grupo para afinar diferencias.</small>
-            </span>
-          </button>
-          <button class="choice-row" type="button" onclick="startByContinent('Oceania')">
-            <span class="choice-copy">
-              <strong>Oceania</strong>
-              <small>Rondas cortas para repasar rapido.</small>
-            </span>
-          </button>
-        </div>
-      </article>
-    </section>
-
-    <section class="info-ribbon">
-      <article class="info-pill">
-        <strong>Menos ruido</strong>
-        <p>La home deja de ser un mosaico de tarjetas y pasa a ser una decision clara en dos pasos.</p>
-      </article>
-      <article class="info-pill">
-        <strong>Mas contexto</strong>
-        <p>El filtro se conserva y se muestra despues, para que no tengas que recordar que elegiste.</p>
-      </article>
-      <article class="info-pill">
-        <strong>Mas foco</strong>
-        <p>La partida se apoya en un panel lateral y un area central grande, no en cajitas por todos lados.</p>
-      </article>
-    </section>
   </main>
 
+  <script src="js/data.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    (function () {
+      // ── Fecha en el botón ──────────────────────────────
+      const now = new Date();
+      const dateLabel = document.getElementById('hero-date-label');
+      if (dateLabel) {
+        dateLabel.textContent = now.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+      }
+
+      // ── Estado reto diario ─────────────────────────────
+      const dateKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+      try {
+        const raw = localStorage.getItem(`dailyChallenge.${dateKey}`);
+        if (raw) {
+          const data = JSON.parse(raw);
+          const bar = document.getElementById('hero-done-bar');
+          const text = document.getElementById('hero-done-text');
+          const btn = document.getElementById('hero-daily-btn');
+          if (bar) bar.style.display = 'flex';
+          if (text) text.textContent = `Completado hoy — ${data.score} pts, ${data.accuracy}% de precision`;
+          if (btn) btn.classList.add('hero-daily-btn--done');
+        }
+      } catch(_e) {}
+
+      // ── Mosaico de banderas ────────────────────────────
+      const mosaic = document.getElementById('flags-mosaic');
+      if (mosaic && window.COUNTRIES_DATA) {
+        // Selección curada: 12 banderas de distintos continentes y niveles 1-2
+        const picks = window.COUNTRIES_DATA
+          .filter(c => c.nivel <= 2)
+          .filter((_, i) => i % 18 === 0 || i % 13 === 0 || i % 7 === 0)
+          .slice(0, 12);
+
+        // Asegurar al menos 12 con fallback
+        if (picks.length < 12) {
+          const extra = window.COUNTRIES_DATA.filter(c => c.nivel === 1).slice(0, 12 - picks.length);
+          picks.push(...extra);
+        }
+
+        picks.slice(0, 12).forEach((country, i) => {
+          const cell = document.createElement('div');
+          cell.className = 'flag-mosaic-cell';
+          const img = document.createElement('img');
+          img.src = `assets/flags/${country.bandera}`;
+          img.alt = country.pais;
+          img.loading = 'lazy';
+          img.onerror = function() { this.parentElement.style.display = 'none'; };
+          cell.appendChild(img);
+          mosaic.appendChild(cell);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
