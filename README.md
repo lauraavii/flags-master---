@@ -39,7 +39,7 @@ Un juego web interactivo para aprender y practicar el reconocimiento de banderas
 - Conexión a internet para la carga inicial (después funciona offline)
 - Servidor web local recomendado para evitar restricciones de CORS en archivos locales
 
-##  Instalación y Uso
+## Uso
 
 ### Opción 1: Sitio Web (Recomendado)
 
@@ -53,13 +53,6 @@ Visita [retobanderas.es](https://retobanderas.es) para jugar directamente en lí
    # Con PHP
    php -S localhost:8080
    ```
-
-3. Abre tu navegador en: `http://localhost:8080`
-
-### Opción 2: Abrir Directamente
-- Descomprime el archivo ZIP
-- Abre `index.html` en tu navegador
-- Nota: Algunos navegadores pueden tener restricciones con archivos locales
 
 ##  Cómo Jugar
 
@@ -105,11 +98,6 @@ flags-master/
 
 ¡Las contribuciones son bienvenidas! Para contribuir:
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcion`)
-3. Commit tus cambios (`git commit -am 'Agrega nueva función'`)
-4. Push a la rama (`git push origin feature/nueva-funcion`)
-5. Abre un Pull Request
 
 ### Ideas para Contribuciones
 - Nuevos modos de juego
@@ -161,13 +149,3 @@ Valida:
 - niveles fuera de rango
 - duplicados `pais + continente`
 
-## Notas de mantenimiento
-
-- Si añades países, añade también bandera (`.png`) y, si aplica, mapa (`.svg`).
-- Mantén los continentes consistentes con el dataset:
-  - `Europa`
-  - `Asia`
-  - `Africa`
-  - `America del Norte`
-  - `America del Sur`
-  - `Oceania`
