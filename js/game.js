@@ -42,12 +42,12 @@ const VALID_MODES = new Set([
 ]);
 
 const MODE_LABELS = {
-  countryToFlag: "Pais a 4 banderas",
-  flagToCountry4: "Bandera a 4 paises",
-  flagToCountry: "Bandera a escribir pais",
-  dragDrop: "Arrastrar bandera a pais",
+  countryToFlag: "País a 4 banderas",
+  flagToCountry4: "Bandera a 4 países",
+  flagToCountry: "Bandera a escribir país",
+  dragDrop: "Arrastrar bandera a país",
   countryToFlag6: "Cascada de 6 banderas",
-  mode1minuto: "1 minuto de paises",
+  mode1minuto: "1 minuto de países",
   mode1minutoBanderas: "1 minuto de banderas",
   mapMode: "Mapas",
   infoTable: "Tabla informativa",
@@ -436,13 +436,13 @@ function updateSessionSummary() {
 
   const history = getSessionHistory();
   if (history.length === 0) {
-    summaryEl.textContent = "Sesion actual: sin partidas terminadas.";
+    summaryEl.textContent = "Sesión actual: sin partidas terminadas.";
     return;
   }
 
   const last = history[0];
   const best = history.reduce((acc, item) => (item.score > acc.score ? item : acc), history[0]);
-  summaryEl.textContent = `Ultima: ${last.modeLabel}, ${last.score} pts y ${last.accuracy}% de precision. Mejor sesion: ${best.score} pts en ${best.modeLabel}.`;
+  summaryEl.textContent = `Última: ${last.modeLabel}, ${last.score} pts y ${last.accuracy}% de precisión. Mejor sesión: ${best.score} pts en ${best.modeLabel}.`;
 }
 
 function initializeScoreState() {
@@ -800,24 +800,24 @@ function updateGameOverPanel(status) {
     game_over: {
       kicker: "Sin vidas",
       title: "Te has quedado sin vidas",
-      copy: "La ronda termina aqui, pero puedes reiniciarla al instante o bajar a los controles para cambiar el enfoque.",
+      copy: "La ronda termina aquí, pero puedes reiniciarla al instante o bajar a los controles para cambiar el enfoque.",
     },
     completado: {
-      kicker: isDaily ? "Reto del dia completado" : "Ronda completada",
+      kicker: isDaily ? "Reto del día completado" : "Ronda completada",
       title: isDaily ? "Lo has conseguido" : "Has completado toda la ronda",
       copy: isDaily
-        ? "Has terminado el reto de hoy. Vuelve manana para un nuevo desafio."
-        : "Buen cierre. Puedes repetir la misma configuracion o usar el panel lateral para apretar un poco mas la dificultad.",
+        ? "Has terminado el reto de hoy. Vuelve mañana para un nuevo desafio."
+        : "Buen cierre. Puedes repetir la misma configuración o usar el panel lateral para apretar un poco más la dificultad.",
     },
     tiempo_finalizado: {
       kicker: "Tiempo agotado",
-      title: "Se acabo el tiempo",
-      copy: "La sesion queda guardada. Decide si quieres volver a intentar el mismo minuto o cambiar a otro modo.",
+      title: "Se acabó el tiempo",
+      copy: "La sesión queda guardada. Decide si quieres volver a intentar el mismo minuto o cambiar a otro modo.",
     },
     sin_datos: {
       kicker: "Sin datos",
-      title: "No hay paises para esta combinacion",
-      copy: "Ese filtro no tiene contenido util en este modo. Cambia el filtro o vuelve al selector.",
+      title: "No hay países para esta combinación",
+      copy: "Ese filtro no tiene contenido útil en este modo. Cambia el filtro o vuelve al selector.",
     },
   };
 
@@ -834,14 +834,14 @@ function updateGameOverPanel(status) {
     summary = `Te has quedado sin vidas con ${scoreState?.score ?? 0} puntos y ${scoreState?.accuracy ?? 0}% de precisión.`;
   } else if (status === "completado") {
     if (mode === "dailyChallenge") {
-      summary = `Reto del día completado con ${scoreState?.score ?? 0} puntos y ${scoreState?.accuracy ?? 0}% de precisión. Vuelve manana.`;
+      summary = `Reto del día completado con ${scoreState?.score ?? 0} puntos y ${scoreState?.accuracy ?? 0}% de precisión. Vuelve mañana.`;
       saveDailyCompletion(scoreState?.score ?? 0, scoreState?.accuracy ?? 0);
       updateDailyBadge();
     } else {
       summary = `Has completado ${answered} preguntas con ${scoreState?.score ?? 0} puntos y una mejor racha de ${scoreState?.bestStreak ?? 0}.`;
     }
   } else if (status === "tiempo_finalizado") {
-    summary = `Has cerrado el cronometro con ${puntos} aciertos visuales y ${scoreState?.score ?? 0} puntos totales.`;
+    summary = `Has cerrado el cronómetro con ${puntos} aciertos visuales y ${scoreState?.score ?? 0} puntos totales.`;
   } else if (status === "sin_datos") {
     summary = "Prueba con otra región, otro nivel o vuelve al selector de modos.";
   }
