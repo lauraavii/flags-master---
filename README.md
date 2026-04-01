@@ -1,53 +1,136 @@
-# Juego de Banderas
+# Banderas del Mundo
 
-Proyecto web estático para practicar países y banderas con varios modos de juego.
+Un juego web interactivo para aprender y practicar el reconocimiento de banderas de países de todo el mundo. Diseñado para ser educativo, divertido y accesible, con múltiples modos de juego y desafíos diarios.
 
-## Requisitos
+##  Características
 
-- Navegador moderno
-- Servidor estático local (recomendado)
+- **250+ países** con banderas de alta calidad
+- **8 modos de juego** para diferentes estilos de aprendizaje
+- **Reto diario** con preguntas fijas que cambian cada día
+- **Filtros avanzados** por continente o nivel de dificultad
+- **Sistema de puntuación** con rachas y bonos
+- **Interfaz responsive** que funciona en móvil y escritorio
+- **Sin registro** ni dependencias externas
+- **Soporte offline** (una vez cargado)
 
-Ejemplos para servir el proyecto:
+##  Modos de Juego
 
-```bash
-# Opción 1 (Python)
-python3 -m http.server 8080
+### Modos Principales
+- **País a 4 banderas**: Se muestra el nombre del país, elige la bandera correcta entre 4 opciones.
+- **Bandera a 4 países**: Se muestra la bandera, elige el país correcto entre 4 opciones.
+- **Bandera a escribir país**: Se muestra la bandera, escribe el nombre del país.
+- **Arrastrar bandera a país**: Arrastra la bandera al país correspondiente en un mapa interactivo.
 
-# Opción 2 (Node)
-npx serve .
+### Modos Especiales
+- **Cascada de 6 banderas**: Responde correctamente para desbloquear más opciones.
+- **1 minuto de países**: Responde tantas preguntas como puedas en 60 segundos.
+- **1 minuto de banderas**: Variante con enfoque en banderas.
+- **Mapas**: Identifica países en mapas vectoriales.
+- **Tabla informativa**: Explora países en una tabla detallada.
+
+### Reto Diario
+- 20 preguntas fijas que cambian cada día.
+- Mezcla de modos para un desafío equilibrado.
+- Sin límite de tiempo, pero con puntuación guardada.
+
+##  Requisitos
+
+- Navegador web moderno (Chrome, Firefox, Safari, Edge)
+- Conexión a internet para la carga inicial (después funciona offline)
+- Servidor web local recomendado para evitar restricciones de CORS en archivos locales
+
+##  Instalación y Uso
+
+### Opción 1: Sitio Web (Recomendado)
+
+Visita [retobanderas.es](https://retobanderas.es) para jugar directamente en línea sin necesidad de instalar nada.
+
+
+
+   # Con Node.js
+   npx serve .
+
+   # Con PHP
+   php -S localhost:8080
+   ```
+
+3. Abre tu navegador en: `http://localhost:8080`
+
+### Opción 2: Abrir Directamente
+- Descomprime el archivo ZIP
+- Abre `index.html` en tu navegador
+- Nota: Algunos navegadores pueden tener restricciones con archivos locales
+
+##  Cómo Jugar
+
+1. **Inicio**: Elige un filtro (continente, nivel o sin filtro) en la página principal
+2. **Modo**: Selecciona cómo quieres jugar
+3. **Juego**: Responde las preguntas correctamente para ganar puntos
+4. **Puntuación**: Acumula puntos, rachas y precisión
+
+### Sistema de Puntuación
+- **Aciertos**: Puntos base según el modo (10-18 puntos)
+- **Fallos**: Penalización (4-7 puntos)
+- **Rachas**: Bonos progresivos por respuestas consecutivas correctas
+- **Tiempo**: Bonos adicionales en modos cronometrados
+
+##  Estructura del Proyecto
+
+```
+flags-master/
+├── index.html              # Página de inicio y selección de filtros
+├── game.html               # Pantalla de juego principal
+├── README.md               # Este archivo
+├── assets/
+│   ├── ui.css             # Estilos CSS
+│   └── flags/             # Imágenes de banderas
+│       └── maps/          # Mapas por continente
+├── data/
+│   └── countries.json     # Datos de países (fuente)
+└── js/
+    ├── data.js            # Datos inline de países
+    ├── main.js            # Lógica de la página de inicio
+    └── game.js            # Lógica principal del juego
 ```
 
-Luego abre:
+##  Tecnologías
 
-- `http://localhost:8080/index.html` (flujo principal)
-- `http://localhost:8080/game.html` (pantalla unificada alternativa)
+- **HTML5** para la estructura
+- **CSS3** para el diseño y animaciones
+- **JavaScript ES6+** para la lógica
+- **LocalStorage/SessionStorage** para persistencia
+- **Fetch API** para carga de datos
 
-## Flujo principal
+##  Contribuir
 
-1. `index.html`: eliges filtro (nivel, continente o libre).
-2. `juego/modos.html`: eliges modo de juego.
-3. `juego/juego.html`: se ejecuta la partida.
+¡Las contribuciones son bienvenidas! Para contribuir:
 
-Los filtros y el modo se persisten en `sessionStorage`.
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcion`)
+3. Commit tus cambios (`git commit -am 'Agrega nueva función'`)
+4. Push a la rama (`git push origin feature/nueva-funcion`)
+5. Abre un Pull Request
 
-## Sistema de puntuacion
+### Ideas para Contribuciones
+- Nuevos modos de juego
+- Más países y banderas
+- Mejoras en la interfaz
+- Traducciones a otros idiomas
+- Optimizaciones de rendimiento
 
-- Puntos por acierto/error definidos por modo de juego.
-- Bonus progresivo por racha de aciertos.
-- Bonus adicional al cerrar bloque en modo cascada.
-- En modos de 1 minuto, bonus por tiempo restante.
-- Se muestran en pantalla: puntos, aciertos, fallos, precision y racha maxima.
+##  Licencia
 
-Toda la informacion de puntuacion de la sesion se guarda en:
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-- `flagsGame.currentStats` (estado de la partida actual)
-- `flagsGame.history` (historial de partidas de la sesion)
+##  Agradecimientos
 
-## Modos disponibles
+- Datos de países de fuentes públicas
+- Iconos y diseño inspirado en juegos educativos
+- Comunidad open source por las herramientas utilizadas
 
-- País -> 4 banderas
-- Bandera -> 4 países
-- Bandera -> escribir país
+---
+
+¡Diviértete aprendiendo sobre las banderas del mundo! 🇺🇳
 - Drag & drop (bandera -> país)
 - Cascada (6 banderas)
 - 1 minuto: países
