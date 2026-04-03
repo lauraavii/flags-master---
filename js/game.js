@@ -682,6 +682,7 @@ function getMapCandidates(country) {
     country.mapa,
     country.map,
     country.png,
+    country.webp,
     country.mappng,
     country.mapPath,
     country.bandera ? country.bandera.replace(/\.[^.]+$/, "") : "",
@@ -714,7 +715,7 @@ function getMapCandidates(country) {
     ),
   ];
 
-  return uniqueNames.map(name => resolveAssetUrl(`${mapsBasePath}/${folder}/${name}.png`));
+  return uniqueNames.map(name => resolveAssetUrl(`${mapsBasePath}/${folder}/${name}.webp`));
 }
 
 function getMapSrc(country) {
@@ -756,8 +757,8 @@ async function renderMapMode(correcto) {
 
   const tokenAtStart = currentRoundToken;
 
-  // 🔥 AQUÍ CAMBIO IMPORTANTE (PNG en vez de SVG)
-  const src = getMapSrc(correcto); // ahora debe apuntar a .png
+  // 🔥 AQUÍ CAMBIO IMPORTANTE (WebP en vez de SVG)
+  const src = getMapSrc(correcto); // ahora debe apuntar a .webp
 
   if (tokenAtStart !== currentRoundToken) return;
 
