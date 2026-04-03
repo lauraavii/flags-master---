@@ -72,6 +72,11 @@ const DAILY_QUESTIONS = 20;
 let dailyQuestionTypes = [];
 const MAP_ENABLED_CONTINENTS = new Set(["europa", "africa", "asia", "oceania", "america del norte", "america del sur",]);
 
+const AVAILABLE_MAPS = {
+  oceania: new Set(['aus', 'fiji', 'ncl', 'nzl', 'png', 'slb', 'vut', 'wsm']),
+  // Agregar otros continentes si faltan mapas
+};
+
 const CONTINENT_ALIASES = {
   europa: "Europa",
   asia: "Asia",
@@ -286,6 +291,10 @@ function renderVisualImage(src, alt, className = "") {
   img.decoding = "async";
   img.loading = "eager";
   img.referrerPolicy = "no-referrer";
+  img.onerror = () => {
+    visualStage.innerHTML = "";
+    setText("pais", "Mapa no disponible");
+  };
   if (className) img.className = className;
   visualStage.appendChild(img);
   return img;
@@ -313,12 +322,9 @@ function loadImageProbe(src) {
   if (!src) return Promise.resolve(false);
   if (imageLoadPromiseCache.has(src)) return imageLoadPromiseCache.get(src);
 
-  const promise = new Promise(resolve => {
-    const img = new Image();
-    img.onload = () => resolve(true);
-    img.onerror = () => resolve(false);
-    img.src = src;
-  });
+  const promise = fetch(src, { method: 'HEAD' })
+    .then(response => response.ok)
+    .catch(() => false);
 
   imageLoadPromiseCache.set(src, promise);
   return promise;
@@ -608,21 +614,16 @@ async function buildFilteredCountries(type, value) {
 
 
   if (isMapMode()) {
-    const allowedContinents = filtered.filter(country => {
+    filtered = filtered.filter(country => {
       const continent = normalizeText(canonicalContinent(country?.continente || ""));
-      return MAP_ENABLED_CONTINENTS.has(continent);
+      if (!MAP_ENABLED_CONTINENTS.has(continent)) return false;
+      // Para oceania, filtrar solo países con mapas disponibles
+      if (continent === 'oceania') {
+        const code = country.bandera.replace(/\..+$/, '');
+        return AVAILABLE_MAPS.oceania.has(code);
+      }
+      return true;
     });
-
-    const checks = await Promise.all(
-      allowedContinents.map(async country => ({
-        country,
-        src: await getExistingMapSrc(country),
-      }))
-    );
-
-    filtered = checks
-      .filter(item => Boolean(item.src))
-      .map(item => item.country);
   }
 
   return filtered;
@@ -732,12 +733,12 @@ async function getExistingMapSrc(country) {
     return mapAvailabilityCache.get(cacheKey);
   }
 
-  for (const candidate of candidates) {
-    const exists = await loadImageProbe(candidate);
-    if (exists) {
-      mapAvailabilityCache.set(cacheKey, candidate);
-      return candidate;
-    }
+  // Solo verificar la primera candidate para evitar múltiples requests 404
+  const candidate = candidates[0];
+  const exists = await loadImageProbe(candidate);
+  if (exists) {
+    mapAvailabilityCache.set(cacheKey, candidate);
+    return candidate;
   }
 
   mapAvailabilityCache.set(cacheKey, null);
@@ -758,7 +759,7 @@ async function renderMapMode(correcto) {
   const tokenAtStart = currentRoundToken;
 
   // 🔥 AQUÍ CAMBIO IMPORTANTE (WebP en vez de SVG)
-  const src = getMapSrc(correcto); // ahora debe apuntar a .webp
+  const src = await getExistingMapSrc(correcto); // ahora debe apuntar a .webp
 
   if (tokenAtStart !== currentRoundToken) return;
 
