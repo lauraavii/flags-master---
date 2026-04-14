@@ -33,11 +33,6 @@ Un juego web interactivo para aprender y practicar el reconocimiento de banderas
 - Mezcla de modos para un desafío equilibrado.
 - Sin límite de tiempo, pero con puntuación guardada.
 
-##  Requisitos
-
-- Navegador web moderno (Chrome, Firefox, Safari, Edge)
-- Conexión a internet para la carga inicial (después funciona offline)
-- Servidor web local recomendado para evitar restricciones de CORS en archivos locales
 
 ## Uso
 
@@ -45,14 +40,6 @@ Un juego web interactivo para aprender y practicar el reconocimiento de banderas
 
 Visita [retobanderas.es](https://retobanderas.es) para jugar directamente en línea sin necesidad de instalar nada.
 
-
-
-   # Con Node.js
-   npx serve .
-
-   # Con PHP
-   php -S localhost:8080
-   ```
 
 ##  Cómo Jugar
 
