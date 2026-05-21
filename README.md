@@ -93,7 +93,7 @@ abrir index.html
 ![Juego](./assets/captura2.png)
 
 ###  Resultado
-![Resultado](./assets/captura3.png)
+![Otro modo](./assets/captura3.png)
 
 ---
 
