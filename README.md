@@ -86,7 +86,6 @@ abrir index.html
 
 ##  Capturas
 
-*(Añade aquí imágenes de tu juego para mejorar la presentación)*
 
 ```md
 ![Inicio](assets/captura1.png)
