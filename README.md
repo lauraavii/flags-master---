@@ -63,7 +63,7 @@ flags-master/
 ├── assets/
 │   ├── ui.css
 │   └── flags/
-│       └── maps/
+│   └── maps/
 ├── data/
 │   └── countries.json
 └── js/
