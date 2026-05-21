@@ -86,12 +86,14 @@ abrir index.html
 
 ##  Capturas
 
+###  Inicio
+![Inicio](./assets/captura1.png)
 
-```md
-![Inicio](assets/captura1.png)
-![Juego](assets/captura2.png)
-![Juego](assets/captura3.png)
-```
+###  Juego
+![Juego](./assets/captura2.png)
+
+###  Resultado
+![Resultado](./assets/captura3.png)
 
 ---
 
