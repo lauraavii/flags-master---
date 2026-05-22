@@ -9,13 +9,12 @@ Proyecto desarrollado como práctica personal combinando lógica en JavaScript, 
 
 ##  Características principales
 
-* +250 países con banderas
+* Amplio conjunto de países con sus banderas
 * 8 modos de juego diferentes
 * Sistema de puntuación con rachas y bonificaciones
 * Reto diario automático
 * Filtros por continente y dificultad
 * Funciona en móvil y escritorio
-* Soporte offline (tras primera carga)
 
 ---
 
@@ -62,7 +61,7 @@ flags-master/
 ├── game.html
 ├── assets/
 │   ├── ui.css
-│   └── flags/
+│   ├──flags/
 │   └── maps/
 ├── data/
 │   └── countries.json
@@ -72,15 +71,6 @@ flags-master/
     └── game.js
 ```
 
----
-
-##  Ejecución local
-
-No requiere instalación:
-
-```bash
-abrir index.html
-```
 
 ---
 
